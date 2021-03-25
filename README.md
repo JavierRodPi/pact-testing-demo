@@ -57,11 +57,16 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-To run this demo you are going to need the next installed in your machine
+To run this demo you are going to need the next installed in your machine:
+
 **Docker**: https://docs.docker.com/get-docker/
+
 **Terraform**: https://learn.hashicorp.com/tutorials/terraform/install-cli
+
 **Node JS**: https://nodejs.org/en/download/
+
 **Pact broker** 
+
 Postgre db
  ```sh
  docker run --name pactbroker-db -e POSTGRES_PASSWORD=ThePostgresPassword -e POSTGRES_USER=admin -e PGDATA=/var/lib/postgresql/data/pgdata -v /var/lib/postgresql/data:/var/lib/postgresql/data -d postgres
