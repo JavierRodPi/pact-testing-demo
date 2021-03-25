@@ -27,13 +27,13 @@
 
 This project is a demo that will allow you to understand and learn how to do contract testing in an AWS Serverless microservice (AWS API Gateway and AWS Lambda) without needing to deploy any service to a real AWS environment.
 
-This demo use the next components:
+This demo uses the next components:
 * **PACT** For running the tests
 * **PACT Broker** For sharing the contracts
-* **Localstack** to run a local AWS enviroment
+* **Localstack** to run a local AWS environment
 * **Terraform** for deploying the provider 
 
-The demo is composed by two microservices Account API (Consumer) and User API (Provider). 
+The demo is composed of two microservices Account API (Consumer) and User API (Provider). 
 
 ![image](https://user-images.githubusercontent.com/17270660/112550503-618b9000-8db7-11eb-96fa-40445f590888.png)
 
@@ -76,7 +76,7 @@ Pact Brocker
    ```sh
    https://github.com/JavierRodPi/pact-testing-demo.git
    ```
- 2. Navigate to the root folder of the proyect and run localstack from the docker compose file.
+ 2. Navigate to the root folder of the project and run localstack from the docker-compose file.
    ```sh
    docker-compose -f docker-localstack.yml up -d
    ```
@@ -88,7 +88,7 @@ You will find the consumer test under
 
     ~/AccountApi/contract-testing/get-user.spec.ts
 
-In order tu run this test first you will need to install all the dependencies. 
+To run this test first, you will need to install all the dependencies. 
 
  1. From the project root folder `cd AccountApi/contract-testing`
  2. `yarn install`
@@ -111,7 +111,7 @@ You will find the provider under
 
     ~/UserApi/components/get-account
 
-In order tu run this test first you will need to build and updaload get-user to localstack:
+In order to run this test first you will need to build and upload get-user to localstack:
 
  1.  From the project root folder `cd UserApi/components/get-user` 
  2. `yarn install / npm install`
@@ -122,14 +122,14 @@ In order tu run this test first you will need to build and updaload get-user to 
  7. `aws  --endpoint-url=http://localhost:4566 s3 mb s3://artifacts`
  8. `aws  --endpoint-url=http://localhost:4566 s3 cp ./get-user.zip s3://artifacts`
 
-After building and uploading the get-user artifact into S3 you will need to create the enviroment inde localstack.
+After building and uploading the get-user artefact into S3 you will need to create the environment inside localstack.
 
  1. From the project root folder `cd UserApi/iac/env/local`
  2. `terraform init`
  3. `terraform plan`
  4. `terraform apply -auto-approve`
 
-Now that the local enviroment is live you will be able to continue with the provider test
+Now that the local environment is live you will be able to continue with the provider test
 
 Install test dependencies and run the provider test
  1. From the project root folder `cd UserApi/contract-testing`
@@ -145,7 +145,7 @@ Inside the "get-user.spec.ts" file modify:     `pactUrls:  "YOUR_BROKER_URL",`
 <!-- INSTALLATION ISSUES-->
 ## Pact package installation issues
 
-Installation work around: 
+Installation workaround:
 Source: https://github.com/pact-foundation/pact-js-core 
 
 ### Pact Download Location
