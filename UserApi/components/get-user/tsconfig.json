@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+  },
+  "include": ["**/*.ts", "package.json"],
+  "exclude": ["tests/*"],
+  "extends": "../../tsconfig-base",
+}

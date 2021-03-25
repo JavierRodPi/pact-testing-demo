@@ -1,0 +1,54 @@
+{
+  "consumer": {
+    "name": "account-api"
+  },
+  "provider": {
+    "name": "user-api"
+  },
+  "interactions": [
+    {
+      "description": "A non existing user id",
+      "providerState": "User doesn't Exists",
+      "request": {
+        "method": "GET",
+        "path": "/user/000000",
+        "matchingRules": {
+          "$.path": {
+            "match": "regex",
+            "regex": "^\\/user\\/"
+          }
+        }
+      },
+      "response": {
+        "status": 404,
+        "headers": {
+        }
+      }
+    },
+    {
+      "description": "A user id",
+      "providerState": "User Exists",
+      "request": {
+        "method": "GET",
+        "path": "/user/123456",
+        "matchingRules": {
+          "$.path": {
+            "match": "regex",
+            "regex": "^\\/user\\/"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+        },
+        "body": "{\"userId\":\"123456\",\"firstName\":\"Tony\",\"lastName\":\"Stark\",\"email\":\"tony.stark@avengers.com\",\"test\":\"test\"}"
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "author": "",
+  "dependencies": {
+    "@pact-foundation/pact": "^9.15.3",
+    "@types/node": "^14.0.14",
+    "@types/qs": "^6.9.4",
+    "aws-sdk": "^2.855.0",
+    "axios": "^0.19.2",
+    "chalk": "^4.1.0",
+    "node-localstack": "^0.0.2",
+    "qs": "^6.9.4",
+    "rimraf": "^3.0.2"
+  },
+  "description": "",
+  "devDependencies": {
+    "@types/jest": "^25.2.3",
+    "@types/sinon": "^9.0.4",
+    "@typescript-eslint/eslint-plugin": "^2.34.0",
+    "@typescript-eslint/parser": "^2.34.0",
+    "aws-sdk-mock": "^5.1.0",
+    "axios-mock-adapter": "^1.18.1",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.21.2",
+    "eslint-plugin-prettier": "^3.1.4",
+    "jest": "^26.0.1",
+    "jest-cucumber": "^2.0.11",
+    "prettier": "^2.0.5",
+    "sinon": "^9.0.2",
+    "ts-jest": "^25.5.1",
+    "typescript": "^3.9.5"
+  },
+  "config": {
+    "pact_do_not_track": true,
+    "pact_binary_location": "./"
+  },
+  "license": "UNLICENSED",
+  "main": "index.js",
+  "name": "get-user",
+  "private": "true",
+  "scripts": {
+    "build": "rimraf dist && APP_BUILD_NUMBER=${RELEASE:=none} tsc && cp -r ./node_modules ./dist",
+    "build-zip": "yarn build && mkdir artifact && cd dist && zip -r ../artifact/get-user.zip .",
+    "lint": "eslint . --max-warnings 0 --ext js,ts",
+    "lint-fix": "eslint . --ext js,ts --fix",
+    "test": "jest",
+    "test:ci": "jest --silent --coverage"
+  },
+  "version": "1.0.0"
+}

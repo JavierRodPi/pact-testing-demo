@@ -1,0 +1,29 @@
+{
+  "name": "get-user",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "@types/node": "^14.0.14",
+    "@types/qs": "^6.9.4",
+    "aws-sdk": "^2.709.0",
+    "axios": "^0.19.2",
+    "chalk": "^4.1.0",
+    "node-localstack": "^0.0.2",
+    "qs": "^6.9.4",
+    "rimraf": "^3.0.2"
+  },
+  "scripts": {
+    "compile": "tsc",
+    "build": "rimraf dist && APP_BUILD_NUMBER=${RELEASE:=none} tsc && cp -r ./node_modules ./dist",
+    "build-zip": "yarn build && mkdir artifact && cd dist && zip -r ../artifact/get-user.zip ."
+  },
+  "devDependencies": {
+    "card-validator": "^8.1.0",
+    "aws-sdk": "^2.655.0",
+    "@types/aws-lambda": "^8.10.51",
+    "@types/node": "^13.13.5",
+    "typescript": "^3.8.3",
+    "jest": "^26.0.1",
+    "jest-cucumber": "^2.0.11"
+  }
+}
