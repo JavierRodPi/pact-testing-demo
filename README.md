@@ -196,3 +196,8 @@ Note that pact-core will not be functional without the binary.
  * https://blog.scottlogic.com/2019/01/07/introduction-to-contract-testing-part-1.html
  * https://pactflow.io/blog/what-is-contract-testing/
 
+## Contact
+
+ - Twitter	[@javierrodpi](https://twitter.com/javierrodpi) 
+ - Linkedin	[@jrptech](https://www.linkedin.com/in/jrptech) 
+ - Email	javierrp@outlook.com
