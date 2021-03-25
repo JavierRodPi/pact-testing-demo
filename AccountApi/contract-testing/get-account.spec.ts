@@ -11,7 +11,7 @@ import { pactWith } from 'jest-pact';
 
 var opts = {
   pactFilesOrDirs: ["../pacts"],
-  pactBroker: "http://ec2-3-8-160-74.eu-west-2.compute.amazonaws.com:9292/",
+  pactBroker: "YOUR_BROKER_URL",
   consumerVersion: "1.0.0"
 }
 const publisher = new Publisher(opts);
@@ -20,7 +20,6 @@ pactWith({
   consumer: "account-api",
   provider: "user-api",
   port: 4311,
-  // pactBrokerUrl: "http://ec2-3-8-160-74.eu-west-2.compute.amazonaws.com:9292/"
   log: path.resolve(process.cwd(), "../logs", "pact.log"),
   dir: path.resolve(process.cwd(), "../pacts"),
 }, provider => {

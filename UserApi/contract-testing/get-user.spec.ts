@@ -17,8 +17,7 @@ describe("Pact Verification", () => {
     }
     const verifierOptions: VerifierOptions = {
       providerBaseUrl: `http://localhost:4566/restapis/${localApiId}/api/_user_request_/`,
-      pactUrls: ["http://ec2-3-8-160-74.eu-west-2.compute.amazonaws.com:9292/pacts/provider/user-api/consumer/account-api/latest"
-      ],
+      pactUrls: ["YOUR_BROKER_URL"],
       timeout: 1000000,
     };
     return await new Verifier(verifierOptions).verifyProvider();
