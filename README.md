@@ -1,3 +1,4 @@
+
 <p align="center">
   <h1 align="center">Contract testing for AWS Microservices with PACT and localstack</h1>
 </p>
@@ -36,8 +37,6 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
 There are many great README templates available on GitHub, however, I didn't find one that really suit my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
 
 Here's why:
@@ -49,14 +48,6 @@ Of course, no one template will serve all projects since your needs may be diffe
 
 A list of commonly used resources that I find helpful are listed in the acknowledgements.
 
-### Built With
-
-This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-* [Bootstrap](https://getbootstrap.com)
-* [JQuery](https://jquery.com)
-* [Laravel](https://laravel.com)
-
-
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -66,70 +57,154 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+To run this demo you are going to need the next installed in your machine
+**Docker**: https://docs.docker.com/get-docker/
+**Terraform**: https://learn.hashicorp.com/tutorials/terraform/install-cli
+**Node JS**: https://nodejs.org/en/download/
+**Pact broker** 
+Postgre db
+ ```sh
+ docker run --name pactbroker-db -e POSTGRES_PASSWORD=ThePostgresPassword -e POSTGRES_USER=admin -e PGDATA=/var/lib/postgresql/data/pgdata -v /var/lib/postgresql/data:/var/lib/postgresql/data -d postgres
+```
+
+    docker run -it --link pactbroker-db:postgres --rmGRES_PORT_5432_TCP_ADDR" -p "$POSTGRES_PORT_5432_TCP_PORT" -U admin'
+  Login with you password and run the next commands individually:
+ 
+   
+
+    CREATE USER pactbrokeruser WITH PASSWORD 'TheUserPassword';
+    CREATE DATABASE pactbroker WITH OWNER pactbrokeruser;
+    GRANT ALL PRIVILEGES ON DATABASE pactbroker TO pactbrokeruser;
+    exit
+
+Pact Brocker
+
+    docker run --name pactbroker --link pactbroker-dbERNAME=pactbrokeruser -e PACT_BROKER_DATABASE_PASSWORD=TheUserPassword -e PACT_B_BROKER_DATABASE_NAME=pactbroker -d  -p 9292:9292 pactfoundation/pact-broker
+
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+ 1. Clone the repo
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+   https://github.com/JavierRodPi/pact-testing-demo.git
    ```
-3. Install NPM packages
+ 2. Navigate to the root folder of the proyect and run localstack from the docker compose file.
    ```sh
-   npm install
+   docker-compose -f docker-localstack.yml up -d
    ```
-4. Enter your API in `config.js`
-   ```JS
-   const API_KEY = 'ENTER YOUR API';
-   ```
+  
+<!-- USAGE EXAMPLES -->
+## Consumer (Account API)
 
+You will find the consumer test under 
 
+    ~/AccountApi/contract-testing/get-user.spec.ts
+
+In order tu run this test first you will need to install all the dependencies. 
+
+ 1. From the project root folder `cd AccountApi/contract-testing`
+ 2. `yarn install`
+		If you are facing issues with the installation of PACT, please review this   <a href="#installation-issues">Section</a>
+		
+ 3.  Once all the dependencies are installed you will need to configure your PACT Broker path.
+Inside the "get-user.spec.ts" file modify
+
+    pactBroker:  "YOUR_BROKER_URL",
+
+ 4. Run the test `jest`
+
+  
+The test will generate the pact file and it will upload the pact to the broker.
 
 <!-- USAGE EXAMPLES -->
-## Usage
+## Provider Testing (User API)
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+You will find the provider under 
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+    ~/UserApi/components/get-account
+
+In order tu run this test first you will need to build and updaload get-user to localstack:
+
+ 1.  From the project root folder `cd UserApi/components/get-user` 
+ 2. `yarn install / npm install`
+ 3. `tsc`
+ 4. Copy node_modules folder into dist
+ 5. Zip all the content inside dist and name the file "get-user.zip"
+ 6. `cd dist`
+ 7. `aws  --endpoint-url=http://localhost:4566 s3 mb s3://artifacts`
+ 8. `aws  --endpoint-url=http://localhost:4566 s3 cp ./get-user.zip s3://artifacts`
+
+After building and uploading the get-user artifact into S3 you will need to create the enviroment inde localstack.
+
+ 1. From the project root folder `cd UserApi/iac/env/local`
+ 2. `terraform init`
+ 3. `terraform plan`
+ 4. `terraform apply -auto-approve`
+
+Now that the local enviroment is live you will be able to continue with the provider test
+
+Install test dependencies and run the provider test
+ 1. From the project root folder `cd UserApi/contract-testing`
+ 2. `yarn install`
+		If you are facing issues with the installation of PACT, please review this   <a href="#installation-issues">Section</a>
+		
+ 3.  Once all the dependencies are installed you will need to configure your PACT Broker path.
+Inside the "get-user.spec.ts" file modify:     `pactUrls:  "YOUR_BROKER_URL",`  
+
+ 4. Run the test `jest`
+
+  
+<!-- INSTALLATION ISSUES-->
+## Pact package installation issues
+
+Installation work around: 
+Source: https://github.com/pact-foundation/pact-js-core 
+
+### Pact Download Location
+
+For those that are behind a corporate firewall or are seeing issues where our package downloads binaries during installation, you can download the binaries directly from our  [github releases](https://github.com/pact-foundation/pact-ruby-standalone/releases), and specify the location where you want Pact to get the binaries from using the 'config' section in your package.json file:
+
+    {
+    	"name": "some-project",
+    	...
+    	"config": {
+    		"pact_binary_location": "/home/some-user/Downloads"
+    	},
+    	...
+    }
+
+It will accept both a local path or an http(s) url. It must point to the directory containing the binary needed as the binary name is appended to the end of the location. For the example given above, Pact will look for the binary at  `/home/some-user/Downloads/pact-1.44.0-win32.zip`  for a Windows system. However, by using this method, you must use the correct Pact version binary associated with this version of Pact-Core. For extra security measurements, checksum validation has been added to prevent tampering with the binaries.
+
+If your environment uses self-signed certificates from an internal Certificate Authority (CA), you can configure this using the standard options in an  [npmrc](https://docs.npmjs.com/configuring-npm/npmrc.html)  file as per below:
+
+    _~/.npmrc_:
+    
+    cafile=/etc/ssl/certs/ca-certificates.crt
+    strict-ssl=true
 
 
+### Skip Pact binary downloading
+
+You can also force Pact to skip the installation of the binary during  `npm install`  by setting  `PACT_SKIP_BINARY_INSTALL=true`. This feature is useful if you want to speed up builds that don't need Pact and don't want to modify your projects dependencies.
+
+Note that pact-core will not be functional without the binary.
+
+    PACT_SKIP_BINARY_INSTALL=true npm install
 
 
 <!-- ACKNOWLEDGEMENTS -->
-## Acknowledgements
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Img Shields](https://shields.io)
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Pages](https://pages.github.com)
-* [Animate.css](https://daneden.github.io/animate.css)
-* [Loaders.css](https://connoratherton.com/loaders)
-* [Slick Carousel](https://kenwheeler.github.io/slick)
-* [Smooth Scroll](https://github.com/cferdinandi/smooth-scroll)
-* [Sticky Kit](http://leafo.net/sticky-kit)
-* [JVectorMap](http://jvectormap.com)
-* [Font Awesome](https://fontawesome.com)
+## Links
+**Tools**
+ * [PACT](https://docs.pact.io/)
+ * [PACT JS](https://github.com/pact-foundation/pact-js-core)
+ * [PACT Git hub](https://www.npmjs.com/package/@pact-foundation/pact)
+ * [Localstack](https://localstack.cloud/)
 
 
+**Contracts testing**
 
+ * https://martinfowler.com/bliki/ContractTest.html
+ * https://martinfowler.com/articles/consumerDrivenContracts.html#Consumer-drivenContracts
+ * https://blog.scottlogic.com/2019/01/07/introduction-to-contract-testing-part-1.html
+ * https://pactflow.io/blog/what-is-contract-testing/
 
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
-[contributors-url]: https://github.com/othneildrew/Best-README-Template/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
-[forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
-[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
-[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
-[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
-[product-screenshot]: images/screenshot.png
