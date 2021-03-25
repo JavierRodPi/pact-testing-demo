@@ -38,7 +38,7 @@ The demo is composed by two microservices Account API (Consumer) and User API (P
 ![image](https://user-images.githubusercontent.com/17270660/112550503-618b9000-8db7-11eb-96fa-40445f590888.png)
 
 
-### Prerequisites
+## Prerequisites
 
 To run this demo you are going to need the next installed in your machine:
 
@@ -70,7 +70,7 @@ Pact Brocker
     docker run --name pactbroker --link pactbroker-dbERNAME=pactbrokeruser -e PACT_BROKER_DATABASE_PASSWORD=TheUserPassword -e PACT_B_BROKER_DATABASE_NAME=pactbroker -d  -p 9292:9292 pactfoundation/pact-broker
 
 
-### Installation
+## Installation
 
  1. Clone the repo
    ```sh
