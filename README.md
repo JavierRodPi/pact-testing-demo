@@ -48,7 +48,9 @@ To run this demo you are going to need the next installed in your machine:
 
 **Node JS**: https://nodejs.org/en/download/
 
-**Pact broker** 
+**Pact broker**:
+
+Pact Broker requires a Postgres db to work, so the first step is to install and configure one,
 
 Postgre db
  ```sh
